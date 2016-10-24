@@ -20,6 +20,10 @@ namespace Client
         static async Task AsyncMain()
         {
 
+            /**************************************************************************************************************
+             * DEV NOTE: when pointing to Azure Service Bus, run Service project first to ensure Queue is created first
+             **************************************************************************************************************/
+             
             string endpointName = "Samples.StepByStep.Client";
 
             Console.Title = endpointName;
@@ -28,7 +32,14 @@ namespace Client
             endpointConfiguration.SendFailedMessagesTo("error");
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.EnableInstallers(); // Ask NServiceBus to automatically create message queues
-            endpointConfiguration.UsePersistence<InMemoryPersistence>(); // Only used for subscription information for this example
+            endpointConfiguration.UsePersistence<InMemoryPersistence>(); // Only used for MSMQ subscription information for this example, NOT needed for Azure Service Bus
+
+            if (Shared.Config.USE_AZURE_INSTEAD_OF_MSMQ)
+            {
+                endpointConfiguration.UseTransport<AzureServiceBusTransport>()
+                                            .ConnectionStringName("NServiceBus/Transport")
+                                            .UseTopology<ForwardingTopology>();
+            }
 
             var endpointInstance = await Endpoint
                                             .Start(endpointConfiguration)

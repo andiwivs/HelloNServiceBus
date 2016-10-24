@@ -28,6 +28,13 @@ namespace Subscriber
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.SendFailedMessagesTo("error");
+            
+            if (Shared.Config.USE_AZURE_INSTEAD_OF_MSMQ)
+            {
+                endpointConfiguration.UseTransport<AzureServiceBusTransport>()
+                                            .ConnectionStringName("NServiceBus/Transport")
+                                            .UseTopology<ForwardingTopology>();
+            }
 
             var endpointInstance = await Endpoint
                                             .Start(endpointConfiguration)
