@@ -28,7 +28,8 @@ namespace Server
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.SendFailedMessagesTo("error");
-            
+            endpointConfiguration.AuditProcessedMessagesTo("audit");
+
             if (Shared.Config.USE_AZURE_INSTEAD_OF_MSMQ)
             {
                 endpointConfiguration.UseTransport<AzureServiceBusTransport>()
