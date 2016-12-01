@@ -29,6 +29,7 @@ namespace Subscriber
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.SendFailedMessagesTo("error");
             endpointConfiguration.AuditProcessedMessagesTo("audit");
+            endpointConfiguration.HeartbeatPlugin("particular.servicecontrol");
 
             if (Shared.Config.USE_AZURE_INSTEAD_OF_MSMQ)
             {

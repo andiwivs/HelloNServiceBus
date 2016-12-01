@@ -31,6 +31,7 @@ namespace Client
             var endpointConfiguration = new EndpointConfiguration(endpointName);
             endpointConfiguration.SendFailedMessagesTo("error");
             endpointConfiguration.AuditProcessedMessagesTo("audit");
+            endpointConfiguration.HeartbeatPlugin("particular.servicecontrol");
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.EnableInstallers(); // Ask NServiceBus to automatically create message queues
             endpointConfiguration.UsePersistence<InMemoryPersistence>(); // Only used for MSMQ subscription information for this example, NOT needed for Azure Service Bus
